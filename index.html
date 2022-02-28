@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="pt-br" ng-app = "helloWorld">
+<head>
+    <meta charset="UTF-8">
+    <script src="https://ajax.googleapis.com/ajax/libs/angularjs/1.6.9/angular.min.js"></script>
+    <script src="angular.js"></script>
+    <script>
+        //criando o modulo, o [] serve para injetar novos modulos
+        angular.module("helloWorld", []);
+        //para localizar o modulo basta passa-lo sem a []
+        angular.module("helloWorld").controller("helloWorldCtrl", function ($scope) {
+            $scope.message = "Hello World!";
+        });
+    </script>
+    <title>Hello Word !</title>
+</head>
+<body>
+    <div ng-controller="helloWorldCtrl">
+        <!-- {{message}} é o mesmo que $scope.message -->
+        {{message}}
+    </div>
+</body>
+</html>
