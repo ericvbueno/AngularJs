@@ -11,14 +11,34 @@
         angular.module("ListaTelefonica").controller("ListaTelefonicaCtrl", function ($scope) {
             $scope.app = "Lista Telefonica";
             $scope.contatos = [
-                {nome: 'Ana', telefone: '999999999'},
-                {nome: 'Rodrigo', telefone: '999999988'},
-                {nome: 'Maria', telefone: '999999977'}
+                {nome: 'Ana', telefone: '999999999', cor: 'yellow'},
+                {nome: 'Rodrigo', telefone: '999999988', cor: 'blue'},
+                {nome: 'Maria', telefone: '999999977', cor: 'red'}
             ];
+            $scope.operadoras = [
+                {nome: 'Oi', codigo: '14', categoria: 'Celular'},
+                {nome: 'Vivo', codigo: '15', categoria: 'Celular'},
+                {nome: 'Tim', codigo: '41', categoria: 'Celular'},
+                {nome: 'GVT', codigo: '25', categoria: 'Fixo'},
+                {nome: 'Embratel', codigo: '21', categoria: 'Fixo'}
+            ];
+
             $scope.adicionarContato = function(contato) {
                 $scope.contatos.push(angular.copy(contato));
                 delete $scope.contato;
-            }
+            };
+
+            $scope.RemoverContato = function(contatos) {
+                $scope.contatos = contatos.filter(function (contato) {
+                    if (!contato.selecionado) return contato;
+                });
+            };
+
+            $scope.isContatoSelecionado = function(contatos) {
+                return contatos.some(function (contato) {
+                    return contato.selecionado
+                });
+            };
         });
     </script>
 </head>
@@ -26,22 +46,33 @@
     <div class="container jumbotron">
         <!-- Com o ng-bing nós podemos substituir um elemento por uma expressão -->
         <!-- <h4 ng-bind="app"></h4> -->
-       <h4>{{app}}</h4>
+        <h3>{{app}}</h3>
        <table class="table table-striped">
                <tr>
+                   <th></th>
                    <th>Nome</th>
                    <th>Telefone</th>
+                   <th>Operadora</th>
+                   <th></th>
                </tr>
                <!-- O ng-repeat funciona como um for in do js -->
-               <tr ng-repeat="contato in contatos">
+               <tr ng-class="{'selecionado negrito': contato.selecionado}" ng-repeat="contato in contatos">
+                   <td><input type="checkbox" ng-model="contato.selecionado"></td>
                    <td>{{contato.nome}}</td>
                    <td>{{contato.telefone}}</td>
+                   <td>{{contato.operadora.nome}}</td>
+                   <td>
+                       <div style="width: 20px; height: 20px;" ng-style="{'background-color': contato.cor}"></div>
+                   </td>
                </tr>
        </table>
        <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome">
        <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone">
-       <button class="btn btn-primary" ng-click="adicionarContato(contato)">Adicionar</button>
-       {{contato}};
+       <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
+            <option value="">Selecione uma operadora</option>
+       </select>
+       <button class="btn btn-primary btn-block" ng-disabled="!contato.nome || !contato.telefone" ng-click="adicionarContato(contato)">Adicionar</button>
+       <button class="btn btn-danger btn-block" ng-disabled="!isContatoSelecionado(contatos)" ng-click="RemoverContato(contatos)">Remover</button>
     </div>
 </body>
 </html>
