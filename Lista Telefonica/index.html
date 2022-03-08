@@ -47,7 +47,7 @@
         <!-- Com o ng-bing nós podemos substituir um elemento por uma expressão -->
         <!-- <h4 ng-bind="app"></h4> -->
         <h3>{{app}}</h3>
-       <table class="table table-striped">
+       <table ng-show="contatos.length > 0" class="table table-striped">
                <tr>
                    <th></th>
                    <th>Nome</th>
@@ -72,7 +72,8 @@
             <option value="">Selecione uma operadora</option>
        </select>
        <button class="btn btn-primary btn-block" ng-disabled="!contato.nome || !contato.telefone" ng-click="adicionarContato(contato)">Adicionar</button>
-       <button class="btn btn-danger btn-block" ng-disabled="!isContatoSelecionado(contatos)" ng-click="RemoverContato(contatos)">Remover</button>
+       <button class="btn btn-danger btn-block" ng-if="isContatoSelecionado(contatos)" ng-click="RemoverContato(contatos)">Remover</button>
     </div>
+    <div ng-include="'footer.html'"></div>
 </body>
 </html>
