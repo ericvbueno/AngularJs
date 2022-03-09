@@ -26,6 +26,7 @@
             $scope.adicionarContato = function(contato) {
                 $scope.contatos.push(angular.copy(contato));
                 delete $scope.contato;
+                $scope.contatoForm.$setPristine();
             };
 
             $scope.RemoverContato = function(contatos) {
@@ -66,12 +67,21 @@
                    </td>
                </tr>
        </table>
-       <input class="form-control" type="text" ng-model="contato.nome" placeholder="Nome">
-       <input class="form-control" type="text" ng-model="contato.telefone" placeholder="Telefone">
-       <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
-            <option value="">Selecione uma operadora</option>
-       </select>
-       <button class="btn btn-primary btn-block" ng-disabled="!contato.nome || !contato.telefone" ng-click="adicionarContato(contato)">Adicionar</button>
+       <hr/>
+       <form name="contatoForm">
+           <input class="form-control" type="text" ng-model="contato.nome" name="nome" placeholder="Nome" ng-required="true">
+           <input class="form-control" type="text" ng-model="contato.telefone" name="telefone" placeholder="Telefone" ng-required="true" ng-minlength="11">
+           <select class="form-control" ng-model="contato.operadora" ng-options="operadora.nome for operadora in operadoras">
+                <option value="">Selecione uma operadora</option>
+           </select>
+       </form>
+       <div ng-show="contatoForm.nome.$invalid && contatoForm.nome.$dirty" class="alert alert-danger" style="margin-top: 1rem">
+           Preencha o nome !
+       </div>
+       <div ng-show="contatoForm.telefone.$invalid && contatoForm.telefone.$dirty" class="alert alert-danger" style="margin-top: 1rem">
+            Preencha o telefone corretamente !
+        </div>
+       <button class="btn btn-primary btn-block" ng-disabled="contatoForm.$invalid" ng-click="adicionarContato(contato)">Adicionar</button>
        <button class="btn btn-danger btn-block" ng-if="isContatoSelecionado(contatos)" ng-click="RemoverContato(contatos)">Remover</button>
     </div>
     <div ng-include="'footer.html'"></div>
